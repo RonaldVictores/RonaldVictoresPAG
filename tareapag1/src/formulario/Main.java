@@ -1,5 +1,8 @@
 package formulario;
+
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -14,6 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setTitle("INTERFAZ GRÁFICA");
+
         // Crear los elementos de la GUI
         AnchorPane root = new AnchorPane();
         ListView<String> listView = new ListView<>();
@@ -22,11 +27,16 @@ public class Main extends Application {
         Label[] labels = new Label[5];
         ImageView[] imageViews = new ImageView[5];
 
+        // usuarios
+        ObservableList<String> nombresUsuarios = FXCollections.observableArrayList(
+                "RONALD", "VICTOR", "KLEBER", "DANILO", "BRADDY");
+
         // Configurar la lista
         listView.setLayoutX(367);
         listView.setLayoutY(30);
         listView.setPrefSize(241, 367);
         listView.setStyle("-fx-background-color: black;");
+        listView.setItems(nombresUsuarios);
 
         // Configurar el campo de texto
         textField.setLayoutX(378);
@@ -35,15 +45,23 @@ public class Main extends Application {
         textField.setStyle("-fx-background-color: blue;");
 
         // Configurar la barra de desplazamiento
-        scrollBar.setLayoutX(4);
-        scrollBar.setLayoutY(14);
-        scrollBar.setPrefSize(20, 238);
+        scrollBar.setLayoutX(610);
+        scrollBar.setLayoutY(30);
+        scrollBar.setOrientation(javafx.geometry.Orientation.VERTICAL);
+        scrollBar.setPrefHeight(367);
+        scrollBar.setMin(0);
+        scrollBar.setMax(nombresUsuarios.size() - 1);
+        scrollBar.setBlockIncrement(1);
+        scrollBar.setUnitIncrement(1);
 
-        //5
+        //
+        scrollBar.valueProperty().addListener((observable, oldValue, newValue) -> {
+            listView.scrollTo(newValue.intValue());
+        });
 
         // Configurar las etiquetas y las imágenes
         for (int i = 0; i < 5; i++) {
-            labels[i] = new Label("Texto(nombre y apellido)");
+            labels[i] = new Label(nombresUsuarios.get(i));
             labels[i].setLayoutX(86);
             labels[i].setLayoutY(30 + 62 * i);
             labels[i].setPrefSize(189, 42);
